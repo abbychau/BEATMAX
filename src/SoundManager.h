@@ -1,17 +1,21 @@
 #ifndef _SOUNDMANAGER_H_
 #define _SOUNDMANAGER_H_
 
-class Sound;
+#include "Sound.h"
+
+class SoundBuffer;
 
 class SoundManager {
    public:
+      // Maximum number of simultaneous sounds
+      static const int MAX_SOUNDS = 32;
+
       SoundManager ();
       ~SoundManager ();
 
-      void addSound (Sound &sound);
-      void update ();
+      void addSoundBuffer (SoundBuffer &buffer);
    private:
-
+      Sound sounds[MAX_SOUNDS];
 };
 
 #endif

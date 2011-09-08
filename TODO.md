@@ -43,6 +43,6 @@ Audio
 * <del>SoundBuffer</del>
 * <del>Sound</del>
 * <del>Add libvorbisfile for decoding oggs</del>
-* Sound manager (amount of OpenAL sound sources are limited)
+* <del>Sound manager (amount of OpenAL sound sources are limited)</del>
 * Add FFMPEG as an option for decoding audio
 
