@@ -1,6 +1,5 @@
 #include "SoundBuffer.h"
 
-#include <cstdio>
 #include <vorbis/vorbisfile.h>
 
 using std::string;
@@ -27,10 +26,7 @@ void SoundBuffer::loadFromFile (const std::string &location) {
    }
 
    // Generate buffer
-   alGetError ();
    alGenBuffers (1, &(this->buffer));
-
-   if (alGetError() != AL_NO_ERROR) printf ("fuck1\n");
 
    // Only supports ogg's for now
    this->loadOgg (location);
@@ -51,7 +47,7 @@ void SoundBuffer::loadOgg (const string &location) {
    vorbis_info *info;
    OggVorbis_File oggFile;
 
-   // open vorbis file
+   // Open vorbis file
    ov_fopen (location.c_str(), &oggFile);
 
    // Get info
@@ -87,6 +83,6 @@ void SoundBuffer::loadOgg (const string &location) {
 
    this->loaded = true;
 
-   // Free the memory used by the decoder
+   // Free the memory used for the decoded data
    delete[] soundBuf;
 }

@@ -9,8 +9,7 @@ Sound::Sound () {
 
 Sound::Sound (const SoundBuffer &buffer) {
    this->loaded = false;
-
-   loadFromBuffer (buffer);
+   this->loadFromBuffer (buffer);
 }
 
 Sound::~Sound () {
