@@ -5,7 +5,7 @@ General
 -------
 
 * <del>Timer</del>
-* Conf reader
+* <del>Conf reader</del>
 * Profiles
 * High scores
 * Menu screens/system
