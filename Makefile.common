@@ -1,0 +1,3 @@
+CPPSRC = main.cpp Game.cpp GraphicObject.cpp Texture.cpp Note.cpp ObjectManager.cpp Timer.cpp SoundBuffer.cpp Sound.cpp
+HSRC = settings.h Game.h GraphicObject.h Texture.h Note.h ObjectManager.h Timer.h SoundBuffer.h Sound.h
+OBJ = $(CPPSRC:.cpp=.o)
