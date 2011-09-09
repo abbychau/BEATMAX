@@ -9,6 +9,11 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+extern "C" {
+   #include <libavcodec/avcodec.h>
+   #include <libavformat/avformat.h>
+}
+
 #include "Game.h"
 #include "settings.h"
 
@@ -60,6 +65,10 @@ Game::Game () {
 
       // Initialise OpenAL
       this->initAL ();
+
+      // Initialise ffmpeg
+      avcodec_init ();
+      av_register_all ();
 
       // Set pointer to the game instance 
       game = this;

@@ -11,7 +11,7 @@
 
 class SoundBuffer {
    public:
-      static const int MAX_BUFFER = 16777216;
+      static const int MAX_BUFFER = 67108864;
       static const int CHUNK_SIZE = 4096;
 
       SoundBuffer ();

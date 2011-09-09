@@ -1,7 +1,9 @@
-#include "SoundBuffer.h"
-
-#include <vorbis/vorbisfile.h>
+#include <iostream>
 #include <cassert>
+#include <vorbis/vorbisfile.h>
+
+#include "SoundBuffer.h"
+#include "Decoder.h"
 
 using std::string;
 
@@ -24,7 +26,22 @@ SoundBuffer::~SoundBuffer () {
 
 void SoundBuffer::loadFromFile (const std::string &location) {
    // Only supports ogg's for now
-   this->loadOgg (location);
+   // this->loadOgg (location);
+
+   ALsizei freq;
+   ALenum format;
+   int size = 0;
+
+   // Allocate memory for decoded buffer, and decode
+   char *soundBuf = new char[MAX_BUFFER];
+   Decoder::decodeAudio (location, soundBuf, format, size, freq);
+
+   alBufferData (this->buffer, format, soundBuf, size, freq);
+
+   this->loaded = true;
+
+   // Free memory used by decoded buffer
+   delete[] soundBuf;
 }
 
 ALuint SoundBuffer::getALBuffer () const {
@@ -75,7 +92,7 @@ void SoundBuffer::loadOgg (const string &location) {
    ov_clear (&oggFile);
    
    //  the buffer
-   alBufferData (buffer, format, soundBuf, curOffset, freq);
+   alBufferData (this->buffer, format, soundBuf, curOffset, freq);
 
    this->loaded = true;
 
