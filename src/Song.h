@@ -4,26 +4,31 @@
 #include <string>
 #include <queue>
 
-class Note;
-class SoundBuffer;
-
-const double DEFAULT_BPM = 130.0;
-const double DEFAULT_TIME_SIGNATURE = 1.0;
-
-const int MAX_MEASURES = 1000;
-const int MAX_WAV_POINTS = 1296;
-const int MAX_BPM_POINTS = 1296;
+#include "Note.h"
+#include "SoundBuffer.h"
 
 class Song {
    public:
-      Song ();
-      Song (const std::string &location);
-      ~Song ();
+      static const int MAX_WAV_POINTS = 1296;
+      static const int MAX_BPM_POINTS = 1296;
 
-      void loadFromFile (const std::string &location);
+      Song ();
+      ~Song ();
 
       std::queue<Note> * getNoteEvents ();
       std::queue<int> * getMeasureLineEvents ();
+
+      void setTitle (const std::string &title);
+      void setArtist (const std::string &artist);
+      void setGenre (const std::string &genre);
+      void setPlayLevel (const int level);
+      void setWavPoint (int point, const std::string &location);
+
+      std::string getTitle ();
+      std::string getArtist ();
+      std::string getGenre ();
+      int getPlayLevel ();
+
    private:
      std::queue<Note> noteEvents; 
      std::queue<int> measureLineEvents;
@@ -37,11 +42,8 @@ class Song {
      int playLevel;
      int rank;
 
-     double bpms[MAX_MEASURES];
-     double timeSignatures[MAX_MEASURES];
-
      SoundBuffer wavPoints[MAX_WAV_POINTS];
-     double bpmPoints[MAX_BPM_POINTS;
+     double bpmPoints[MAX_BPM_POINTS];
 };
 
 #endif

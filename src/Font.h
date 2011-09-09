@@ -13,7 +13,7 @@ class Font {
       ~Font ();
 
       void loadFromFile (const std::string &location, int size);
-      void renderText (const std::string text, Texture &texture, int r=255, int g=255, int b=255);
+      void renderText (const std::string &text, Texture &texture, int r=255, int g=255, int b=255);
 
    private:
       TTF_Font *font;

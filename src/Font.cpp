@@ -26,7 +26,7 @@ void Font::loadFromFile (const string &location, int size) {
 
 }
 
-void Font::renderText (const string text, Texture &texture, int r, int g, int b) {
+void Font::renderText (const string &text, Texture &texture, int r, int g, int b) {
    SDL_Surface *fontSurface = NULL;
    SDL_Color colour;
 
