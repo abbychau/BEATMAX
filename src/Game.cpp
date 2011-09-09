@@ -12,6 +12,10 @@
 #include "Game.h"
 #include "settings.h"
 
+// TEMP
+#include "Song.h"
+#include "BmsParser.h"
+
 Game *game = NULL;
 
 Game::Game () {
@@ -83,6 +87,10 @@ void Game::start () {
    // Load menu screen
    if (!this->errorLoadingLibraries) {
       this->running = true;
+
+      Song song;
+      BMS::parse ("../git/data/songs/outlaw/song.bms", song);
+      song.play ();
 
       while (this->running) {
          // Main run loop

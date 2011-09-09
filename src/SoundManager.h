@@ -8,7 +8,7 @@ class SoundBuffer;
 class SoundManager {
    public:
       // Maximum number of simultaneous sounds
-      static const int MAX_SOUNDS = 32;
+      static const int MAX_SOUNDS = 64;
 
       SoundManager ();
       ~SoundManager ();

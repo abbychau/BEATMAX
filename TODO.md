@@ -28,7 +28,7 @@ Graphics
 * <del>Texture</del>
 * <del>GraphicObject</del>
 * Sprite 
-* Font/Text 
+* <del>Font/Text</del>
 * Animator
 * Background video player/decoder using FFMPEG
 * Skinning system

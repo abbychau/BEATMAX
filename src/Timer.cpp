@@ -2,12 +2,12 @@
 #include "Game.h"
 
 Timer::Timer () {
+   // Game instance to get timer information from
+   this->game = Game::getInstance ();
+
    // Initial settings
    this->started = false;
    this->reset ();
-
-   // Game instance to get timer information from
-   this->game = Game::getInstance ();
 }
 
 Timer::~Timer () {

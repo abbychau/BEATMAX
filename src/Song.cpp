@@ -1,16 +1,17 @@
 #include <cstdio>
 #include <fstream>
 #include <string>
-#include <queue>
-#include <cctype>
 #include <cassert>
+#include <iostream>
 
 #include "Song.h"
 #include "Sound.h"
 #include "SoundBuffer.h"
+#include "Timer.h"
+#include "SoundManager.h"
 
 using std::string;
-using std::queue;
+using std::set;
 
 Song::Song () {
 
@@ -20,12 +21,24 @@ Song::~Song () {
 
 }
 
-queue<Note> * Song::getNoteEvents () {
-   return &(this->noteEvents);
-}
+void Song::play () {
+   SoundManager soundManager;
+   Timer timer;
+   timer.start ();
 
-queue<int> * Song::getMeasureLineEvents () {
-   return &(this->measureLineEvents);
+   set<event>::iterator it;
+
+   it = this->events.begin();
+
+   while (it != this->events.end()) {
+      if (timer.getTicks() >= it->millisecs) {
+         if (it->type == BGM || it->type == NOTE) {
+            soundManager.addSoundBuffer (this->wavPoints[it->intValue]);
+         }
+
+         it++;
+      }
+   }
 }
 
 void Song::setTitle (const string &title) {
@@ -48,6 +61,29 @@ void Song::setWavPoint (int point, const string &location) {
    assert (point >= 0 && point < MAX_WAV_POINTS);
    this->wavPoints[point].loadFromFile (location);
 }
+
+void Song::addEvent (eventType type, int value, int millisecs) {
+   event newEvent;
+   newEvent.type = type;
+   newEvent.intValue = value;
+   newEvent.millisecs = millisecs;
+
+   this->events.insert (newEvent);
+}
+
+void Song::addEvent (eventType type, double value, int millisecs) {
+   event newEvent;
+   newEvent.type = type;
+   newEvent.doubleValue = value;
+   newEvent.millisecs = millisecs;
+
+   this->events.insert (newEvent);
+}
+
+set<Song::event> * Song::getEvents () {
+   return &(this->events);
+}
+
 
 string Song::getTitle () {
    return (this->title);
