@@ -11,7 +11,7 @@
 #include "SoundManager.h"
 
 using std::string;
-using std::set;
+using std::multiset;
 
 Song::Song () {
 
@@ -22,11 +22,13 @@ Song::~Song () {
 }
 
 void Song::play () {
+   // Temporary, used for testing
+   // Maybe make this run on a separate thread
    SoundManager soundManager;
    Timer timer;
    timer.start ();
 
-   set<event>::iterator it;
+   multiset<event>::iterator it;
 
    it = this->events.begin();
 
@@ -38,6 +40,12 @@ void Song::play () {
 
          it++;
       }
+   }
+
+   // Temp
+   timer.reset ();
+   while (timer.getTicks() < 1000) {
+
    }
 }
 
@@ -68,8 +76,6 @@ void Song::addEvent (eventType type, int value, int millisecs) {
    newEvent.intValue = value;
    newEvent.millisecs = millisecs;
 
-   std::cout << millisecs << " " << value << std::endl;
-
    this->events.insert (newEvent);
 }
 
@@ -82,7 +88,7 @@ void Song::addEvent (eventType type, double value, int millisecs) {
    this->events.insert (newEvent);
 }
 
-set<Song::event> * Song::getEvents () {
+multiset<Song::event> * Song::getEvents () {
    return &(this->events);
 }
 

@@ -5,12 +5,14 @@
 #include <fstream>
 #include <iostream>
 #include <cctype>
+#include <set>
 
 using std::string;
 using std::ifstream;
+using std::multiset;
 
 namespace BMS {
-   void initParser (const string &location);
+   void initParser (const string &location, Song &song);
    void parseHeaderLine (const string &line, Song &song);
    void parsePointLine (const string &line, Song &song);
    void parseMainLine (const string &line, Song &song);
@@ -27,7 +29,7 @@ namespace BMS {
    unsigned int measureStartTimes[MAX_MEASURES];
 
    void parse (const string &location, Song &song) {
-      initParser (location);
+      initParser (location, song);
 
       parseHeaders (location, song);
       parsePoints (location, song);
@@ -106,10 +108,14 @@ namespace BMS {
       bmsInput.close ();
    }
 
-   void initParser (const string &location) {
+   void initParser (const string &location, Song &song) {
       // Find path to BMS folder
       int lastSeparatorPos = location.rfind('/');
       path = location.substr (0, lastSeparatorPos);
+
+      // Clear event queue
+      multiset<Song::event> *events = song.getEvents ();
+      events->clear ();
 
       for (int i = 0; i < MAX_MEASURES; i++) {
          // TODO: make bpm changing work in the middle of a measure

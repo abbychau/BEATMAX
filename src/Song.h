@@ -45,14 +45,14 @@ class Song {
       void addEvent (eventType type, double value, int millisecs);
       void addEvent (eventType type, int value, int millisecs);
 
-      std::set<event> * getEvents ();
+      std::multiset<event> * getEvents ();
       std::string getTitle ();
       std::string getArtist ();
       std::string getGenre ();
       int getPlayLevel ();
 
    private:
-     std::set<event> events; 
+     std::multiset<event> events; 
 
      // Song properties
      int playerMode;

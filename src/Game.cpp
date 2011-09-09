@@ -88,6 +88,7 @@ void Game::start () {
    if (!this->errorLoadingLibraries) {
       this->running = true;
 
+      // Temporary
       Song song;
       BMS::parse ("../git/data/songs/outlaw/song.bms", song);
       song.play ();

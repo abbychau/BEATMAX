@@ -17,9 +17,10 @@ BMS
 ---
 
 * Parser
-    * General
-    * Time signature changes
-    * BPM changes
+    * <del>General</del>
+    * <del>Time signature changes</del>
+    * Extended BPM changes
+    * Background animation
     * Long notes
 
 Graphics
@@ -30,7 +31,7 @@ Graphics
 * Sprite 
 * <del>Font/Text</del>
 * Animator
-* Background video player/decoder using FFMPEG
+* Background video player/decoder using libavcodec
 * Skinning system
 * Make game graphics/images 
     * <del>Default gear and song playing screen graphics </del>
