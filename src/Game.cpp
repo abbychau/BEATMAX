@@ -68,6 +68,7 @@ Game::Game () {
 
       // Initialise ffmpeg
       avcodec_init ();
+      avcodec_register_all ();
       av_register_all ();
 
       // Set pointer to the game instance 
@@ -99,7 +100,8 @@ void Game::start () {
 
       // Temporary
       Song song;
-      BMS::parse ("../git/data/songs/outlaw/song.bms", song);
+      // BMS::parse ("../git/data/songs/outlaw/song.bms", song);
+      BMS::parse ("../git/data/songs/cypher/_cypher_7a.bms", song);
       song.play ();
 
       while (this->running) {

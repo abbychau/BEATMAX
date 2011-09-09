@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Decoder.h"
 
 extern "C" {
@@ -6,11 +7,12 @@ extern "C" {
    #include <libavformat/avformat.h>
 }
 
+using std::string;
 using std::cerr;
 using std::endl;
 
 namespace Decoder {
-   bool decodeAudio (const std::string &location, void *buffer,
+   bool decodeAudio (const string &location, void *buffer,
                      ALenum &format, int &size, ALsizei &freq) {
 
       bool result = true;
@@ -25,7 +27,7 @@ namespace Decoder {
       try {
          // Open the file and read header information
          if (avformat_open_input (&formatContext, location.c_str(), NULL, NULL) != 0) {
-            throw "Unable to open file for audio decoding";
+            throw "Unable to open file for audio decoding: " + location;
          } 
 
          // Get stream info
@@ -100,7 +102,7 @@ namespace Decoder {
          // Set size of decoded data
          size = curIndex;
 
-      } catch (const char *exception) {
+      } catch (const string &exception) {
          cerr << exception << endl;
          result = false;
       }

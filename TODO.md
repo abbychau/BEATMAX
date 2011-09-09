@@ -47,3 +47,8 @@ Audio
 * <del>Sound manager (amount of OpenAL sound sources are limited)</del>
 * <del>Add FFMPEG as an option for decoding audio</del>
 
+OS Specific
+-----------
+
+* Account for line endings when reading in lines
+* Directory walker
