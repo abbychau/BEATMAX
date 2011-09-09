@@ -1,9 +1,10 @@
 #include <iostream>
 #include <string>
 
+#include <SDL.h>
+#include <SDL_image.h>
+
 #include "Texture.h"
-#include "SDL.h"
-#include "SDL_image.h"
 
 using std::cerr;
 using std::endl;

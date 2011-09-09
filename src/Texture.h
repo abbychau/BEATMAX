@@ -5,7 +5,7 @@
 #include <string>
 #include <cassert>
 
-#include "SDL.h"
+#include <SDL.h>
 
 #ifdef __APPLE__
    #include <OpenGL/gl.h>
