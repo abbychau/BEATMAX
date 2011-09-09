@@ -23,6 +23,7 @@ class Song {
          eventType type;
          unsigned int millisecs;
          int intValue;
+         int column;
          double doubleValue;
 
          bool operator< (const event &compare) const {

@@ -45,7 +45,7 @@ namespace BMS {
          // Read line by line
          getline (bmsInput, currentLine);
 
-         if (currentLine[0] == '#') {
+         if (currentLine.length() > 0 && currentLine[0] == '#') {
             if (currentLine[6] != ':') {
                // Parse the line
                parseHeaderLine (currentLine, song);
@@ -70,7 +70,7 @@ namespace BMS {
          // Read line by line
          getline (bmsInput, currentLine);
 
-         if (currentLine[0] == '#') {
+         if (currentLine.length() > 0 && currentLine[0] == '#') {
             parsePointLine (currentLine, song);
          } 
       }
@@ -96,7 +96,8 @@ namespace BMS {
          // Read line by line
          getline (bmsInput, currentLine);
 
-         if (currentLine[0] == '#' && currentLine[6] == ':') {
+         if (currentLine.length() > 0 && currentLine[0] == '#' && 
+             currentLine[6] == ':') {
             // Parse the line
             parseMainLine (currentLine, song);
          }
@@ -173,11 +174,8 @@ namespace BMS {
          } else if (channelNumber == 8) {
             // extended BPM
          }
-
       } else {
          // Data Points
-         
-         // Find relative path
 
          if (line.find ("#WAV") == 0) {
             // New WAV Point
@@ -193,41 +191,42 @@ namespace BMS {
       int measureNumber;
       int channelNumber;
       string message;
-      int numMessages;
+      int numPoints;
 
       measureNumber = getMeasure (line);
       channelNumber = getChannel (line);
       message = getMessage (line);
 
-      numMessages = message.length()/2;
+      numPoints = message.length()/2;
 
-      for (int i = 1; i <= numMessages; i++) {
+      for (int i = 0; i < numPoints; i++) {
+         // For each point in the message
+         
          int measureLength = measureStartTimes[measureNumber+1] -
             measureStartTimes[measureNumber];
 
-         int point = baseXToInt (message.substr((i-1)*2, 2), 36);
+         int point = baseXToInt (message.substr(i*2, 2), 36);
 
-         if (point != 0) {
-            // If is valid point
+         if (point > 0) {
+            // If the point is is valid 
 
             int curTime = measureStartTimes[measureNumber] + 
-               (measureLength * i)/numMessages;
-
+               (measureLength * i)/numPoints;
 
             if (channelNumber == 1) {
                // BGM channel
                song.addEvent (Song::BGM, point, curTime);
             } else if (channelNumber == 4) {
-               // BGA channelNumber
+               // BGA channel
             } else {
-               // a key
+               // See if it's a key channel
                for (int c = 0; c < 8; c++) {
                   if (channelNumber == PLAYER1_NOTE_CHANNELS[c]) {
                      song.addEvent (Song::NOTE, point, curTime);
                      break;
                   }
                }
-            }
+            } 
          }
       }
    }

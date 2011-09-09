@@ -1,11 +1,15 @@
 #include "SoundBuffer.h"
 
 #include <vorbis/vorbisfile.h>
+#include <cassert>
 
 using std::string;
 
 SoundBuffer::SoundBuffer () {
    this->loaded = false;
+
+   // Generate buffer
+   alGenBuffers (1, &(this->buffer));
 }
 
 SoundBuffer::SoundBuffer (const std::string &location) {
@@ -14,25 +18,17 @@ SoundBuffer::SoundBuffer (const std::string &location) {
 }
 
 SoundBuffer::~SoundBuffer () {
-   if (this->loaded) {
-      alDeleteBuffers (1, &(this->buffer));
-   }
+   // Delete buffer
+   alDeleteBuffers (1, &(this->buffer));
 }
 
 void SoundBuffer::loadFromFile (const std::string &location) {
-   if (this->loaded) {
-      // Delete any existing buffers
-      alDeleteBuffers (1, &(this->buffer));
-   }
-
-   // Generate buffer
-   alGenBuffers (1, &(this->buffer));
-
    // Only supports ogg's for now
    this->loadOgg (location);
 }
 
 ALuint SoundBuffer::getALBuffer () const {
+   assert (this->loaded);
    return (this->buffer);
 }
 

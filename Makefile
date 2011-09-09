@@ -4,7 +4,7 @@
 include Makefile.common
 
 CC = ccache g++-4.2
-CFLAGS = -O2 -Wall -Werror -pedantic -g `sdl-config --cflags` -g
+CFLAGS = -O3 -Wall -Werror -pedantic -g `sdl-config --cflags` -g
 OUTPUT_NAME = Beatmax
 LIBS = -framework OpenGL -framework OpenAL -L/usr/X11R6/lib  `sdl-config --libs` -lSDL_ttf -lSDL_image -lvorbisfile
 

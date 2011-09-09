@@ -4,6 +4,10 @@
 #include <cstdio>
 
 Sound::Sound () {
+   // Create new sound source
+   alGenSources (1, &(this->source));
+   alSourcei (this->source, AL_BUFFER, 0);
+
    this->loaded = false;
 }
 
@@ -13,20 +17,13 @@ Sound::Sound (const SoundBuffer &buffer) {
 }
 
 Sound::~Sound () {
-   if (this->loaded) {
-      alDeleteSources (1, &(this->source));
-   }
+   // Delete the sound source
+   
+   alSourcei (this->source, AL_BUFFER, 0);
+   alDeleteSources (1, &(this->source));
 }
 
 void Sound::loadFromBuffer (const SoundBuffer &buffer) {
-   if (this->loaded) {
-      // Delete existing source
-      alDeleteSources (1, &(this->source));
-   }
-
-   // Create new sound source
-   alGenSources (1, &(this->source));
-
    // Set source settings
    alSourcef (this->source, AL_PITCH, 1.0f);
    alSourcef (this->source, AL_GAIN, 1.0f);

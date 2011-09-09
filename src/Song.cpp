@@ -68,6 +68,8 @@ void Song::addEvent (eventType type, int value, int millisecs) {
    newEvent.intValue = value;
    newEvent.millisecs = millisecs;
 
+   std::cout << millisecs << " " << value << std::endl;
+
    this->events.insert (newEvent);
 }
 
