@@ -67,7 +67,6 @@ Game::Game () {
       this->initAL ();
 
       // Initialise ffmpeg
-      avcodec_init ();
       avcodec_register_all ();
       av_register_all ();
 
@@ -171,7 +170,17 @@ void Game::initGL () {
 
 void Game::initAL () {
    this->alcDevice = alcOpenDevice (NULL);
+
+   if (this->alcDevice == NULL) {
+      throw "Unable to open audio device";
+   }
+
    this->alcContext = alcCreateContext (this->alcDevice, NULL);
+
+   if (this->alcContext == NULL) {
+      throw "Unable to create audio context";
+   }
+
    alcMakeContextCurrent (this->alcContext);
 
    alListener3f (AL_POSITION, 0.0f, 0.0f, 0.0f);
