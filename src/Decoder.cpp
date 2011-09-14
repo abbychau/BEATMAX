@@ -26,7 +26,9 @@ namespace Decoder {
 
       try {
          // Open the file and read header information
-         if (avformat_open_input (&formatContext, location.c_str(), NULL, NULL) != 0) {
+         if (avformat_open_input (&formatContext, location.c_str(), NULL, 
+                                  NULL) != 0) {
+
             throw "Unable to open file for audio decoding: " + location;
          } 
 
@@ -39,7 +41,9 @@ namespace Decoder {
             // For each stream
 
             // Look for an audio stream
-            if (formatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
+            if (formatContext->streams[i]->codec->codec_type == 
+                AVMEDIA_TYPE_AUDIO) {
+
                audioStreamIndex = i;
                break;
             }
@@ -80,13 +84,14 @@ namespace Decoder {
                   // Decode all data from this packet
                   dataSize = AVCODEC_MAX_AUDIO_FRAME_SIZE;
                   int length = avcodec_decode_audio3 (codecContext, 
-                                                      (int16_t *)audioFrameBuffer, 
+                                                      audioFrameBuffer, 
                                                       &dataSize, &packet);
 
                   if (length < 0) throw "Error while decoding";
 
                   // Copy over the decoded data
-                  memcpy ((char*)buffer+curIndex, (int16_t*)audioFrameBuffer, dataSize);
+                  memcpy ((char*)buffer+curIndex, audioFrameBuffer, 
+                          dataSize);
 
                   packet.size -= length;
                   packet.data += length;
