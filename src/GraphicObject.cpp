@@ -46,6 +46,14 @@ void GraphicObject::setY (int newY) {
    this->y = newY;
 }
 
+void GraphicObject::setCentreX (int newX) {
+   this->x = newX-(this->width/2);
+}
+
+void GraphicObject::setCentreY (int newY) {
+   this->y = newY-(this->height/2);
+}
+
 void GraphicObject::setRelativeX (int relativeX) {
    this->x += relativeX;
 }

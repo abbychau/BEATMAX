@@ -31,57 +31,59 @@ class GraphicObject {
       GraphicObject ();
       ~GraphicObject ();
 
-      // Function that takes in a reference to a Texture object 
+      // Method that takes in a reference to a Texture object 
       // and sets it as the texture for the GraphicObject
       void setTexture (Texture &newTexture);
 
-      // Function that set x and y coordinates
+      // Method that sets x and y coordinates (top left)
       void setX (int newX);
       void setY (int newY);
 
-      // Function that sets x and y coordinates relative to the current 
+      // Method that sets x and y coordinates (centre)
+      void setCentreX (int newX);
+      void setCentreY (int newY);
+
+      // Method that sets x and y coordinates relative to the current 
       // coordinates
       void setRelativeX (int relativeX);
       void setRelativeY (int relativeY);
       
-      // Function that sets width and height of the GraphicObject
+      // Method that sets width and height of the GraphicObject
       void setWidth (int newWidth);
       void setHeight (int newHeight);
 
-      // Function that rotates the GraphicObject given the angle in degrees
+      // Method that rotates the GraphicObject given the angle in degrees
       // Rotation is 2D
       void rotate (float degrees);
 
-      // Function that sets the angle of rotation or the GraphicObject
+      // Method that sets the angle of rotation or the GraphicObject
       void setAngle (float newAngle);
 
-      // Function that sets the colour of the GraphicObject 
+      // Method that sets the colour of the GraphicObject 
       void setColour (float r, float g, float b);
       void setAlpha (float alpha);
 
-      // Functions that enable/sets the OpenGL blend functions for the GraphicObject
+      // Methods that enable/sets the OpenGL blend functions for the GraphicObject
       void enableBlend (bool enable);
       void setBlendFunc (GLenum sfactor, GLenum dfactor);
 
-      // Function that returns a pointer to the current texture
+      // Method that returns a pointer to the current texture
       Texture * getTexture ();
 
-      // Function that returns the GraphicObject's x and y coordinates
+      // Method that returns the GraphicObject's x and y coordinates
       int getX ();
       int getY ();
 
-      // Function that returns the width and height of the GraphicObject
+      // Method that returns the width and height of the GraphicObject
       int getWidth ();
       int getHeight ();
 
-      // Function that returns the object's alpha
+      // Method that returns the object's alpha
       float getAlpha ();
 
-      // Function that draws the object at its current frame
+      // Method that draws the object at its current frame
       virtual void draw ();
    protected:
-      bool firstFrame;
-
       // Position/size information
       int x, y;
       int width, height;
@@ -100,11 +102,11 @@ class GraphicObject {
       // Pointer to texture that the object is going to use
       Texture *objectTexture;
 
-      // Function that sets the drawing options for the current GraphicObject
+      // Method that sets the drawing options for the current GraphicObject
       // Sets things like colour and blending
       void setDrawingOptions ();
 
-      // Function that draws the texture
+      // Method that draws the texture
       void drawTexture ();
 };
 
