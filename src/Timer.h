@@ -1,8 +1,6 @@
 #ifndef _TIMER_H_
 #define _TIMER_H_
 
-class Game;
-
 class Timer {
    public:
       Timer ();
@@ -16,8 +14,6 @@ class Timer {
       unsigned int startTime;
       unsigned int stopTime;
       bool started;
-
-      Game *game;
 };
 
 #endif

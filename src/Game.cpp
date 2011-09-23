@@ -21,67 +21,47 @@ extern "C" {
 #include "Song.h"
 #include "BmsParser.h"
 
-Game *game = NULL;
+bool errorLoadingLibraries;
+bool running;
+bool paused;
+unsigned int initTime;
+unsigned int pauseTime;
 
-Game::Game () {
+SDL_Surface *screen;
+ALCdevice *alcDevice;
+ALCcontext *alcContext;
+
+
+void initGUI ();
+void initGL ();
+void initAL ();
+void initDecoder ();
+void resizeWindow (int width, int height);
+
+
+void Game::initialise (int argc, char *argv[]) {
    // Initialise libraries
-   this->screen = NULL;
-   this->errorLoadingLibraries = false;
-   this->running = false;
-   this->paused = false;
-   this->initTime = SDL_GetTicks ();
+   screen = NULL;
+   errorLoadingLibraries = false;
+   running = false;
+   paused = false;
+   initTime = SDL_GetTicks ();
 
    try {
-      // Initialise SDL library
-      if (SDL_Init (SDL_INIT_VIDEO) == -1) {
-         throw "Error loading SDL";
-      }
-
-      // Initialise SDL_ttf
-      if (TTF_Init () == -1) {
-         throw "Error loading SDL_ttf";
-      }
-
-      // Set SDL settings
-      // Make window open at the centre of the screen
-      SDL_putenv ((char*)"SDL_VIDEO_WINDOW_POS=center");
-      
-      // Set window caption
-      SDL_WM_SetCaption (WINDOW_NAME, NULL);
-      SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
-
-      // Set up screen
-      this->screen = SDL_SetVideoMode (DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_BPP, 
-                                 SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE |
-                                 SDL_HWSURFACE);
-
-      if (this->screen == NULL) {
-         throw "Error while setting up SDL";
-      }
-
-      // Initialise OpenGL
-      this->initGL ();
-      this->resizeWindow (this->screen->w, this->screen->h);
-
-      // Initialise OpenAL
-      this->initAL ();
-
-      // Initialise ffmpeg
-      avcodec_register_all ();
-      av_register_all ();
-
-      // Set pointer to the game instance 
-      game = this;
+      initGUI ();
+      initGL ();
+      resizeWindow (screen->w, screen->h);
+      initAL ();
+      initDecoder ();
 
    } catch (const char *message) {
-      this->errorLoadingLibraries = true;
+      errorLoadingLibraries = true;
       std::cerr << message << std::endl;
    }
 }
 
-Game::~Game () {
-   // Cleanup    
-   if (!this->errorLoadingLibraries) { 
+void Game::cleanup () {
+   if (!errorLoadingLibraries) { 
       SDL_FreeSurface (screen);
 
       TTF_Quit ();
@@ -94,8 +74,8 @@ Game::~Game () {
 
 void Game::start () {
    // Load menu screen
-   if (!this->errorLoadingLibraries) {
-      this->running = true;
+   if (!errorLoadingLibraries) {
+      running = true;
 
       // Temporary
       Song song;
@@ -103,56 +83,80 @@ void Game::start () {
       BMS::parse ("../git/data/songs/cypher/_cypher_7a.bms", song);
       song.play ();
 
-      while (this->running) {
+      while (running) {
          // Main run loop
          SDL_Event event;
 
          // Temporary
          while (SDL_PollEvent (&event)) {
             if (event.type == SDL_QUIT) {
-               this->running = false;
+               running = false;
             }
          }
       }
    } 
 }
 
+void Game::exit () {
+   running = false;
+}
+
 void Game::pauseTimer () {
-   this->pauseTime = SDL_GetTicks ();
-   this->paused = true;
+   pauseTime = SDL_GetTicks ();
+   paused = true;
 }
 
 void Game::resumeTimer () {
-   if (this->paused) {
-      this->paused = false;
+   if (paused) {
+      paused = false;
 
       // Shift the game init time forward to 
       // offset the time paused 
-      this->initTime += (SDL_GetTicks() - this->pauseTime);
+      initTime += (SDL_GetTicks() - pauseTime);
    }
 }
 
 unsigned int Game::getTimeSinceInit () {
    unsigned int timeSince;
 
-   if (this->paused) {
-      timeSince = this->pauseTime-this->initTime;
+   if (paused) {
+      timeSince = pauseTime-initTime;
    } else {
-      timeSince = SDL_GetTicks () - this->initTime;
+      timeSince = SDL_GetTicks () - initTime;
    }
 
    return timeSince;
 }
+void initGUI () {
+   // Initialise SDL library
+   if (SDL_Init (SDL_INIT_VIDEO) == -1) {
+      throw "Error loading SDL";
+   }
 
-SDL_Surface * Game::getScreenHandle () {
-   return this->screen;
+   // Initialise SDL_ttf
+   if (TTF_Init () == -1) {
+      throw "Error loading SDL_ttf";
+   }
+
+   // Set SDL settings
+   // Make window open at the centre of the screen
+   SDL_putenv ((char*)"SDL_VIDEO_WINDOW_POS=center");
+   
+   // Set window caption
+   SDL_WM_SetCaption (WINDOW_NAME, NULL);
+   SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
+
+   // Set up screen
+   screen = SDL_SetVideoMode (DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_BPP, 
+                              SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE |
+                              SDL_HWSURFACE);
+
+   if (screen == NULL) {
+      throw "Error while setting up SDL";
+   }
 }
 
-Game * Game::getInstance () {
-   return game;
-}
-
-void Game::initGL () {
+void initGL () {
    // OpenGL settings
    glShadeModel (GL_SMOOTH);
    glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
@@ -168,27 +172,34 @@ void Game::initGL () {
    glEnable (GL_TEXTURE_2D);  
 }
 
-void Game::initAL () {
-   this->alcDevice = alcOpenDevice (NULL);
+void initAL () {
+   alcDevice = alcOpenDevice (NULL);
 
-   if (this->alcDevice == NULL) {
+   if (alcDevice == NULL) {
       throw "Unable to open audio device";
    }
 
-   this->alcContext = alcCreateContext (this->alcDevice, NULL);
+   alcContext = alcCreateContext (alcDevice, NULL);
 
-   if (this->alcContext == NULL) {
+   if (alcContext == NULL) {
       throw "Unable to create audio context";
    }
 
-   alcMakeContextCurrent (this->alcContext);
+   alcMakeContextCurrent (alcContext);
 
+   // Set default listener position
    alListener3f (AL_POSITION, 0.0f, 0.0f, 0.0f);
    alListener3f (AL_VELOCITY, 0.0f, 0.0f, 0.0f);
    alListener3f (AL_ORIENTATION, 0.0f, 0.0f, -1.0f);
 }
 
-void Game::resizeWindow (int width, int height) {
+void initDecoder () {
+   // Register all codecs for decoding
+   avcodec_register_all ();
+   av_register_all ();
+}
+
+void resizeWindow (int width, int height) {
    glViewport (0, 0, (GLint)width, (GLint)height);
 
    glMatrixMode (GL_PROJECTION);

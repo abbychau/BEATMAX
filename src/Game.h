@@ -11,44 +11,28 @@
    #include <AL/alc.h>
 #endif
 
-class Game {
-   public:
-      Game ();
-      ~Game ();
+namespace Game {
+   // Initialise the game
+   void initialise (int argc, char *argv[]);
 
-      // Starts the game
-      void start ();
+   // Do any cleanup before exiting the game
+   void cleanup ();
 
-      // Pauses the game timer
-      void pauseTimer ();
+   // Starts the game
+   void start ();
 
-      // Resumes the game timer
-      void resumeTimer ();
+   // Exits the game
+   void exit ();
 
-      // Returns the time in millisecs since the game started 
-      // (excludes pause times)
-      unsigned int getTimeSinceInit ();
+   // Pauses the main game timer (all Timer objects depend on this)
+   void pauseTimer ();
 
-      SDL_Surface * getScreenHandle ();
+   // Resumes the main game timer
+   void resumeTimer ();
 
-      // Return a pointer to the game instance
-      static Game * getInstance ();
-
-   private:
-      bool errorLoadingLibraries;
-      bool running;
-      bool paused;
-      unsigned int initTime;
-      unsigned int pauseTime;
-
-      SDL_Surface *screen;
-
-      ALCdevice *alcDevice;
-      ALCcontext *alcContext;
-
-      void initGL ();
-      void initAL ();
-      void resizeWindow (int width, int height);
-};
+   // Returns the time in millisecs since the game started 
+   // (excludes pause times)
+   unsigned int getTimeSinceInit ();
+}
 
 #endif

@@ -1,10 +1,9 @@
 #include "Game.h"
 
 int main (int argc, char *argv[]) {
-   Game game;
-
-   // Start the game
-   game.start ();
+   Game::initialise (argc, argv);
+   Game::start ();
+   Game::cleanup ();
 
    return 0;
 }
