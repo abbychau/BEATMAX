@@ -38,7 +38,7 @@ void Font::renderText (const string &text, Texture &texture, int r, int g, int b
    // Make sure a font has been loaded
    assert (this->font != NULL);
 
-   fontSurface = TTF_RenderText_Blended (this->font, text.c_str(), colour);
+   fontSurface = TTF_RenderUTF8_Blended (this->font, text.c_str(), colour);
 
    // Make sure the font surface is fine
    assert (fontSurface != NULL);
