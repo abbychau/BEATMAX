@@ -4,7 +4,7 @@
 #ifdef __APPLE__
    #include <OpenAL/al.h>
 #else
-   #include <al/al.h>
+   #include <AL/al.h>
 #endif
 
 class SoundBuffer;
